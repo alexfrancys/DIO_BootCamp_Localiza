@@ -21,7 +21,7 @@ namespace ContaBancaria.Classes
             ChequeEspecial = chequeEspecial;
         }
 
-        public void Saque(double valorSaque)
+        public bool Saque(double valorSaque)
         {
             if (this.Saldo < valorSaque)
             {
@@ -30,11 +30,18 @@ namespace ContaBancaria.Classes
                 if (opcao == 'S')
                 {
                     this.Saldo = (this.Saldo + this.ChequeEspecial) - valorSaque;
+                    return true;
+                }
+                else
+                {
+                    Console.WriteLine("Operação cancelada.");
+                    return false;
                 }
             }
             else
             {
                 this.Saldo -= valorSaque;
+                return true;
             }
             Console.WriteLine("O Saldo da conta de {0} é de {1}", this.Nome, this.Saldo);
         }
@@ -47,9 +54,8 @@ namespace ContaBancaria.Classes
 
         public void Transferir(double valorTransferencia, Conta contaDestino)
         {
-            this.Saque(valorTransferencia);
+            if (this.Saque(valorTransferencia))
             contaDestino.Depositar(valorTransferencia);
-
         }
 
         public override string ToString()
